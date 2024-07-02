@@ -2,14 +2,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("jvm")
-    kotlin("plugin.spring")
     id("org.jetbrains.compose")
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
 }
-
-group = "zhupff.gadget"
-version = "1.0-SNAPSHOT"
 
 java {
     toolchain {
@@ -38,26 +32,4 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     implementation(project(":model"))
-    implementation(project(":client"))
-    implementation(project(":server"))
-}
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-
-        nativeDistributions {
-            targetFormats(
-//                TargetFormat.AppImage,
-//                TargetFormat.Deb,
-                TargetFormat.Dmg,
-                TargetFormat.Exe,
-//                TargetFormat.Msi,
-//                TargetFormat.Pkg,
-//                TargetFormat.Rpm,
-            )
-            packageName = "gadget-server"
-            packageVersion = "1.0.0"
-        }
-    }
 }
