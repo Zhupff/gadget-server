@@ -23,5 +23,6 @@ plugins {
 
 rootProject.name = "gadget-server"
 include("model")
+include("database")
 include("client")
 include("server")

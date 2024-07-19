@@ -44,3 +44,8 @@ private const val IMPLEMENTATION = "implementation"
 fun DependencyHandlerScope.gson(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.code.gson:gson:2.11.0")
 }
+
+fun DependencyHandlerScope.autoService(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "com.google.auto.service:auto-service-annotations:1.1.1")
+    this.dependencies.add("kapt", "com.google.auto.service:auto-service:1.1.1")
+}

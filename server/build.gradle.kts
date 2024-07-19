@@ -36,4 +36,5 @@ dependencies {
     gson()
 
     implementation(project(":model"))
+    implementation(project(":database"))
 }
