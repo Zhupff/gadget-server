@@ -18,9 +18,9 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("GadgetPublication") {
-            id = "gadget.publish"
-            implementationClass = "Publication"
+        register("GadgetScript") {
+            id = "gadget.script"
+            implementationClass = "Script"
         }
     }
 }

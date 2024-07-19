@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("gadget.publish")
+    id("gadget.script")
 }
 
 repositories {
@@ -12,4 +12,9 @@ dependencies {
 
 kotlin {
     jvmToolchain(17)
+}
+
+
+script {
+    publish()
 }
