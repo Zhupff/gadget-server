@@ -11,20 +11,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toPainter
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+import zhupff.gadget.common.model.ServerUrlAction
 import java.awt.image.BufferedImage
 
 
 @Composable
 @Preview
 fun App() {
-    var baseUrl by remember { mutableStateOf("hello world") }
 
-    val bm = QRCodeWriter().encode(baseUrl, BarcodeFormat.QR_CODE, 512, 512)
-    val bi = BufferedImage(bm.width, bm.height, BufferedImage.TYPE_INT_ARGB)
-    for (h in 0 until bm.height) {
-        for (w in 0 until bm.width) {
-            val bool = bm.get(w, h)
-            bi.setRGB(w, h, if (bool) 0xFF000000.toInt() else 0xFFFFFFFF.toInt())
+    val action = ServerUrlAction(ClientApi.baseUrl)
+    val bitMatrix = QRCodeWriter().encode(action.toString(), BarcodeFormat.QR_CODE, 512, 512)
+    val bufferedImage = BufferedImage(bitMatrix.width, bitMatrix.height, BufferedImage.TYPE_INT_ARGB)
+    for (h in 0 until bitMatrix.height) {
+        for (w in 0 until bitMatrix.width) {
+            bufferedImage.setRGB(w, h, if (bitMatrix.get(w, h)) 0xFF000000.toInt() else 0xFFFFFFFF.toInt())
         }
     }
 
@@ -33,7 +33,7 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
         ) {
             Image(
-                painter = bi.toPainter(),
+                painter = bufferedImage.toPainter(),
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.Center)
             )

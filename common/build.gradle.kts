@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-//    id("gadget.script")
+    id("gadget.script")
 }
 
 repositories {
@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    gson()
 }
 
 kotlin {
