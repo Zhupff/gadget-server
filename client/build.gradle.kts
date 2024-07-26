@@ -1,8 +1,7 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
+    id("gadget.script")
 }
 
 java {
@@ -31,5 +30,6 @@ dependencies {
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
 
+    zxing()
     implementation(project(":model"))
 }

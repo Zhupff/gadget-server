@@ -1,8 +1,8 @@
 package zhupff.gadget.model
 
-abstract class User(
+abstract class Tag(
     val id: String,
     val name: String,
-    val avatar: String,
+    val link: String,
 ) {
 }
