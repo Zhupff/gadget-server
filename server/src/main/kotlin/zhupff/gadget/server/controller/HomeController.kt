@@ -1,4 +1,4 @@
-package zhupff.gadget.controller
+package zhupff.gadget.server.controller
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

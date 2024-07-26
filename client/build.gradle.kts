@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    kotlin("kapt")
     id("org.jetbrains.compose")
     id("gadget.script")
 }
@@ -30,6 +31,7 @@ dependencies {
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
 
+    autoService()
     zxing()
-    implementation(project(":model"))
+    implementation(project(":common"))
 }

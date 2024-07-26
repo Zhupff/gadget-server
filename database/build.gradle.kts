@@ -11,7 +11,7 @@ repositories {
 dependencies {
     gson()
     autoService()
-    implementation(project(":model"))
+    implementation(project(":common"))
 }
 
 kotlin {

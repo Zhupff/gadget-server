@@ -1,7 +1,7 @@
 package zhupff.gadget.database
 
 import com.google.auto.service.AutoService
-import zhupff.gadget.model.User
+import zhupff.gadget.common.model.User
 import java.util.ServiceLoader
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong

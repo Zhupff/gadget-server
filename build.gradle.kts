@@ -37,7 +37,7 @@ dependencies {
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
 
-    implementation(project(":model"))
+    implementation(project(":common"))
     implementation(project(":client"))
     implementation(project(":server"))
 }

@@ -1,6 +1,6 @@
 package zhupff.gadget.database
 
-import zhupff.gadget.model.Tag
+import zhupff.gadget.common.model.Tag
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong

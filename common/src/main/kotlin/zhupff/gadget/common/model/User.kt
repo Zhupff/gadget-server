@@ -1,4 +1,4 @@
-package zhupff.gadget.model
+package zhupff.gadget.common.model
 
 abstract class User(
     val id: String,

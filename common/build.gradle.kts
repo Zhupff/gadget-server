@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("gadget.script")
+//    id("gadget.script")
 }
 
 repositories {
@@ -15,6 +15,6 @@ kotlin {
 }
 
 
-script {
-    publish()
-}
+//script {
+//    publish()
+//}
