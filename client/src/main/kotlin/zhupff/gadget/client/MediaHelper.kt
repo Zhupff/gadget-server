@@ -22,7 +22,7 @@ object MediaHelper {
             width = frame.width,
             height = frame.height,
             duration = (grap.videoTrack.meta.totalDuration * 1000).toLong(),
-            cover = path.replace('.', '_') + "_cover.png",
+            cover = path.removeRange(path.lastIndexOf('.'), path.length) + "_cover.png",
             url = path,
             users = emptyArray(),
             tags = emptyArray(),
