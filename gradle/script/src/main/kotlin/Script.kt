@@ -50,6 +50,10 @@ fun DependencyHandlerScope.gson(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.code.gson:gson:2.11.0")
 }
 
+fun DependencyHandlerScope.jcodec(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "org.jcodec:jcodec-javase:0.2.5")
+}
+
 fun DependencyHandlerScope.zxing(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.zxing:core:3.5.3")
 }

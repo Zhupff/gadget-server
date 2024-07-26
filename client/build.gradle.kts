@@ -32,6 +32,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     autoService()
+    jcodec()
     zxing()
     implementation(project(":common"))
 }
