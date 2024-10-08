@@ -1,6 +1,10 @@
+import java.util.Properties
+
 plugins {
     `kotlin-dsl`
 }
+
+private val gradleProperties = Properties().also { it.load(file("../../gradle.properties").inputStream()) }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -14,6 +18,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 dependencies {
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:${gradleProperties["kotlin.version"] as String}")
 }
 
 gradlePlugin {

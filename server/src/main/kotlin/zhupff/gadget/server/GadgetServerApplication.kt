@@ -6,16 +6,12 @@ import org.springframework.boot.web.context.WebServerInitializedEvent
 import org.springframework.context.ApplicationListener
 import java.net.InetAddress
 
-fun main(args: Array<String>) {
-    runApplication<GadgetServerApplication>(*args)
-}
-
 @SpringBootApplication
 class GadgetServerApplication : ApplicationListener<WebServerInitializedEvent> {
     companion object {
         @JvmStatic
         fun run(args: Array<String> = emptyArray()) {
-            main(args)
+            runApplication<GadgetServerApplication>(*args)
         }
     }
 

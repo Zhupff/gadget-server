@@ -7,29 +7,6 @@ plugins {
     id("gadget.script")
 }
 
-group = "zhupff.gadget"
-version = "1.0-SNAPSHOT"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
-    jvmToolchain(17)
-}
-
-repositories {
-    google()
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    maven("https://jitpack.io")
-}
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -39,4 +16,6 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":database"))
+    implementation(project(":client:api"))
+    implementation(project(":server:api"))
 }

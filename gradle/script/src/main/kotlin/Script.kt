@@ -1,12 +1,21 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 class Script : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.add(ScriptExtension::class.java, "script", ScriptExtension(target))
+        target.extensions.getByType(JavaPluginExtension::class.java).run {
+            toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+        }
+        target.extensions.getByType(KotlinJvmProjectExtension::class.java).run {
+            jvmToolchain(17)
+        }
     }
 }
 
@@ -18,7 +27,7 @@ class ScriptExtension(val project: Project) {
             project.group = "${System.getenv("GROUP")}.${System.getenv("ARTIFACT")}"
             project.version = System.getenv("VERSION")
         } else {
-            project.group = "zhupff.gadget"
+            project.group = "zhupff.gadget.server"
             project.version = "0"
         }
         project.afterEvaluate {
