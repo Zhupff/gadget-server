@@ -19,6 +19,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 
 dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:${gradleProperties["kotlin.version"] as String}")
+    compileOnly("org.jetbrains.compose:compose-gradle-plugin:${gradleProperties["compose.version"] as String}")
 }
 
 gradlePlugin {

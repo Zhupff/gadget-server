@@ -1,6 +1,4 @@
 plugins {
-    kotlin("jvm")
-    kotlin("kapt")
     id("gadget.script")
 }
 

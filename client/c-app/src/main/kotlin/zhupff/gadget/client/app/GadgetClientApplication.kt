@@ -27,18 +27,6 @@ object GadgetClientApplication {
         }
     }
 
-@Composable
-@Preview
-fun App() {
-
-    val action = ServerUrlAction(ClientApi.baseUrl)
-    val bitMatrix = QRCodeWriter().encode(action.toString(), BarcodeFormat.QR_CODE, 512, 512)
-    val bufferedImage = BufferedImage(bitMatrix.width, bitMatrix.height, BufferedImage.TYPE_INT_ARGB)
-    for (h in 0 until bitMatrix.height) {
-        for (w in 0 until bitMatrix.width) {
-            bufferedImage.setRGB(w, h, if (bitMatrix.get(w, h)) 0xFF000000.toInt() else 0xFFFFFFFF.toInt())
-        }
-    }
     @Composable
     @Preview
     fun App() {
@@ -52,16 +40,6 @@ fun App() {
             }
         }
 
-    MaterialTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Image(
-                painter = bufferedImage.toPainter(),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
         MaterialTheme {
             Box(
                 modifier = Modifier.fillMaxSize(),
