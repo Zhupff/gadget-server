@@ -1,6 +1,6 @@
 package zhupff.gadget.database.model
 
-abstract class Video(
+open class Video(
     val id: String,
     val name: String,
     val width: Int,
@@ -10,5 +10,6 @@ abstract class Video(
     val url: String,
     val users: Array<User>,
     val tags: Array<Tag>,
+    val albumId: String,
 ) {
 }

@@ -4,11 +4,13 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.*
 import zhupff.gadget.client.app.GadgetClientApplication
+import zhupff.gadget.database.DataBaseApi
 import zhupff.gadget.server.app.GadgetServerApplication
 import java.awt.Dimension
 
 fun main() {
     runBlocking {
+        DataBaseApi.prepare()
         GadgetClientApplication.prepare()
         GadgetServerApplication.prepare()
     }

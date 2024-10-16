@@ -28,11 +28,14 @@ dependencies {
 
     implementation(project(":basic"))
 
+    implementation(project(":database"))
     implementation(project(":database:d-op"))
     implementation(project(":database:d-res"))
 
+    implementation(project(":client"))
     implementation(project(":client:c-app"))
 
+    implementation(project(":server"))
     implementation(project(":server:s-app"))
     implementation(project(":server:s-home"))
 }

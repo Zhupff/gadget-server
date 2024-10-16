@@ -26,6 +26,7 @@ object MediaUtil {
             url = path,
             users = emptyArray(),
             tags = emptyArray(),
+            albumId = ""
         ) {}
         ImageIO.write(frame, "png", STATIC_RES_DIR.resolve(video.cover).also { println(it.path) })
         println(JsonUtil.toJson(video))
