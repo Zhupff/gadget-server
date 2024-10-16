@@ -19,6 +19,15 @@ private object Main : Runnable {
         while (configOp(inputScanner)) { }
     }
 
+
+    private enum class OpWithCode(
+        val actionDescribe: String,
+    ) {
+        EXIT("Exit Program"),
+        TAG("Config tags.json File"),
+        USERS("Config users.json File"),
+    }
+
     private fun configOp(inputScanner: Scanner): Boolean {
         printlnI("\n[1] Config Operation")
         OpWithCode.values().forEach {
@@ -40,13 +49,4 @@ private object Main : Runnable {
 
         return true
     }
-}
-
-
-private enum class OpWithCode(
-    val actionDescribe: String,
-) {
-    EXIT("Exit Program"),
-    TAG("Config tags.json File"),
-    USERS("Config users.json File"),
 }

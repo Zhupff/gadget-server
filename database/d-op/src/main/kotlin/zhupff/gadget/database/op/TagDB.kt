@@ -1,6 +1,7 @@
 package zhupff.gadget.database.op
 
 import org.json.JSONArray
+import org.json.JSONObject
 import zhupff.gadget.basic.file.TAGS_JSON_FILE
 import zhupff.gadget.basic.json.JsonUtil
 import zhupff.gadget.basic.logger.*
@@ -51,6 +52,8 @@ object TagDB : MutableMap<String, Tag> by ConcurrentHashMap() {
         when (op) {
             OpWithCode.BACK -> return false
             OpWithCode.ADD -> while (addItemWithOp(inputScanner)) {}
+            OpWithCode.DEL -> while (delItemWithOp(inputScanner)) {}
+            OpWithCode.CHECK -> while (checkItemWithOp(inputScanner)) {}
             else -> {
                 printlnW("Input wrong, please input again!")
                 return true
@@ -89,6 +92,53 @@ object TagDB : MutableMap<String, Tag> by ConcurrentHashMap() {
 
         put(newTag.id, newTag)
         put(newTag.name, newTag)
+        return true
+    }
+
+    private fun delItemWithOp(inputScanner: Scanner): Boolean {
+        printlnI("\n[3] Delete a Tag!")
+        printlnV("Input 0 whenever you want to cancel and go back.")
+
+        printD("Input Tag's id or Tag's name:")
+        val input = inputScanner.next().trim()
+        if ("0".contentEquals(input, true)) {
+            return false
+        }
+        val tag = TagDB[input]
+        if (tag != null) {
+            printlnW("You sure delete Tag(${tag.name})? (input yes to delete)")
+            val answer = inputScanner.next().trim()
+            if ("yes".contentEquals(answer, true)) {
+                remove(tag.id)
+                remove(tag.name)
+                printlnD("Tag(${tag.name}) deleted!")
+                return true
+            }
+        } else {
+            printlnW("Tag not found!")
+            return true
+        }
+
+        return true
+    }
+
+    private fun checkItemWithOp(inputScanner: Scanner): Boolean {
+        printlnI("\n[3] Check a Tag!")
+        printlnV("Input 0 whenever you want to cancel and go back.")
+
+        printD("Input Tag's id or Tag's name:")
+        val input = inputScanner.next().trim()
+        if ("0".contentEquals(input, true)) {
+            return false
+        }
+        val tag = TagDB[input]
+        if (tag != null) {
+            val json = JsonUtil.toJson(tag)
+            printlnD(JSONObject(json).toString(2))
+        } else {
+            printlnW("Tag not found!")
+        }
+
         return true
     }
 
