@@ -55,6 +55,10 @@ fun DependencyHandlerScope.autoService(method: String = IMPLEMENTATION) {
     this.dependencies.add("kapt", "com.google.auto.service:auto-service:1.1.1")
 }
 
+fun DependencyHandlerScope.coroutines(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+}
+
 fun DependencyHandlerScope.gson(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.code.gson:gson:2.11.0")
 }

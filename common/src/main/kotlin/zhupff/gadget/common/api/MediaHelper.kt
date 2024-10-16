@@ -1,9 +1,7 @@
-package zhupff.gadget.client
+package zhupff.gadget.common.api
 
 import org.jcodec.api.awt.AWTFrameGrab
 import org.jcodec.common.io.NIOUtils
-import zhupff.gadget.common.api.GsonApi
-import zhupff.gadget.common.api.RES_STATIC_DIR
 import zhupff.gadget.common.model.Video
 import javax.imageio.ImageIO
 

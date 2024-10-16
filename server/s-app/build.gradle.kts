@@ -15,6 +15,7 @@ dependencies {
     coroutines()
     gson()
 
+    implementation(project(":server"))
     implementation(project(":common"))
     implementation(project(":database"))
 }

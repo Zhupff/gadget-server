@@ -24,10 +24,13 @@ dependencies {
     // (in a separate module for demo project and in testMain).
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
+    coroutines()
 
     implementation(project(":common"))
-    implementation(project(":client"))
-    implementation(project(":server"))
+    implementation(project(":client:c-app"))
+
+    implementation(project(":server:s-app"))
+    implementation(project(":server:s-home"))
 }
 
 compose.desktop {

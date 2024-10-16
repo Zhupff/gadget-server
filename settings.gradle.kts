@@ -24,5 +24,12 @@ plugins {
 rootProject.name = "gadget-server"
 include("common")
 include("database")
-include("client", "client:api")
-include("server", "server:api")
+include(
+    "client",
+    "client:c-app",
+)
+include(
+    "server",
+    "server:s-app",
+    "server:s-home",
+)

@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     gson()
+    jcodec()
 }
 
 //script {
