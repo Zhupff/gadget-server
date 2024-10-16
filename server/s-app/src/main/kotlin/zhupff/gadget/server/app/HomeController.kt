@@ -8,7 +8,7 @@ import zhupff.gadget.server.ServerApi
 class HomeController {
 
     @RequestMapping("/home")
-    fun welcome(): String {
-        return ServerApi.Home.welcome()
+    fun home(): String {
+        return ServerApi.Home.home()
     }
 }

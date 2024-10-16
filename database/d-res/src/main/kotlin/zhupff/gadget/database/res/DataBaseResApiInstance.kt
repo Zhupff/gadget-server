@@ -15,10 +15,10 @@ class DataBaseResApiInstance : DataBaseResApi {
         StaticVideo
         StaticAlbum
 
-        logI("StaticTag count: ${StaticTag.size / 2}")
-        logI("StaticUser count: ${StaticUser.size / 2}")
-        logI("StaticImage count: ${StaticImage.size / 2}")
-        logI("StaticVideo count: ${StaticVideo.size / 2}")
-        logI("StaticAlbum count: ${StaticAlbum.size / 2}")
+        logI("StaticTag count: ${StaticTag.size}")
+        logI("StaticUser count: ${StaticUser.size}")
+        logI("StaticImage count: ${StaticImage.size}")
+        logI("StaticVideo count: ${StaticVideo.size}")
+        logI("StaticAlbum count: ${StaticAlbum.size}")
     }
 }

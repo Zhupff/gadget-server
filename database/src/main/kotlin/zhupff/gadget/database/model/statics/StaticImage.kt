@@ -3,6 +3,8 @@ package zhupff.gadget.database.model.statics
 import zhupff.gadget.database.model.Image
 import zhupff.gadget.database.model.Tag
 import zhupff.gadget.database.model.User
+import java.util.ArrayList
+import java.util.HashMap
 import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicLong
 
@@ -25,21 +27,31 @@ open class StaticImage(
     albumId,
 ) {
 
-    companion object : MutableMap<String, StaticImage> by HashMap() {
+    companion object : MutableList<StaticImage> by ArrayList() {
         private val ID = AtomicLong(Int.MAX_VALUE.toLong())
+        private val MAP = HashMap<String, Int>()
 
         init {
             ServiceLoader.load(Image::class.java).forEach { image ->
-                if (image is StaticImage) {
-                    StaticImage[image.id] = image
-                    StaticImage[image.name] = image
-                }
+                // do nothing
             }
+        }
+
+        operator fun get(key: String): StaticImage? {
+            val index = MAP[key]
+            if (index != null && index >= 0) {
+                return StaticImage[index]
+            }
+            return null
         }
     }
 
     init {
-        StaticImage[id] = this
-        StaticImage[name] = this
+        synchronized(StaticImage) {
+            StaticImage.add(this)
+            val index = StaticImage.lastIndex
+            MAP[id] = index
+            MAP[name] = index
+        }
     }
 }

@@ -1,6 +1,8 @@
 package zhupff.gadget.database.model.statics
 
 import zhupff.gadget.database.model.User
+import java.util.ArrayList
+import java.util.HashMap
 import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicLong
 
@@ -12,21 +14,31 @@ open class StaticUser(
     name,
     avatar
 ) {
-    companion object : MutableMap<String, StaticUser> by HashMap() {
+    companion object : MutableList<StaticUser> by ArrayList() {
         private val ID = AtomicLong(Int.MAX_VALUE.toLong())
+        private val MAP = HashMap<String, Int>()
 
         init {
             ServiceLoader.load(User::class.java).forEach { user ->
-//                if (user is StaticUser) {
-//                    StaticUser[user.id] = user
-//                    StaticUser[user.name] = user
-//                }
+                // do nothing
             }
+        }
+
+        operator fun get(key: String): StaticUser? {
+            val index = MAP[key]
+            if (index != null && index >= 0) {
+                return StaticUser[index]
+            }
+            return null
         }
     }
 
     init {
-        StaticUser[id] = this
-        StaticUser[name] = this
+        synchronized(StaticUser) {
+            StaticUser.add(this)
+            val index = StaticUser.lastIndex
+            MAP[id] = index
+            MAP[name] = index
+        }
     }
 }

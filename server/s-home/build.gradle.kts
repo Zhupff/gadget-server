@@ -9,5 +9,7 @@ script {
 dependencies {
     autoService()
 
+    implementation(project(":basic"))
+    implementation(project(":database"))
     implementation(project(":server"))
 }

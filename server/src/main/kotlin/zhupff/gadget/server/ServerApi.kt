@@ -20,6 +20,6 @@ interface ServerApi {
     interface Home {
         companion object : Home by ServiceLoader.load(Home::class.java).first()
 
-        fun welcome(): String
+        fun home(): String
     }
 }

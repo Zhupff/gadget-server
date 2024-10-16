@@ -3,6 +3,8 @@ package zhupff.gadget.database.model.statics
 import zhupff.gadget.database.model.Tag
 import zhupff.gadget.database.model.User
 import zhupff.gadget.database.model.Video
+import java.util.ArrayList
+import java.util.HashMap
 import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicLong
 
@@ -28,21 +30,31 @@ open class StaticVideo(
     tags,
     albumId,
 ) {
-    companion object : MutableMap<String, StaticVideo> by HashMap() {
+    companion object : MutableList<StaticVideo> by ArrayList() {
         private val ID = AtomicLong(Int.MAX_VALUE.toLong())
+        private val MAP = HashMap<String, Int>()
 
         init {
             ServiceLoader.load(Video::class.java).forEach { video ->
-//                if (video is StaticVideo) {
-//                    StaticVideo[video.id] = video
-//                    StaticVideo[video.name] = video
-//                }
+                // do nothing
             }
+        }
+
+        operator fun get(key: String): StaticVideo? {
+            val index = MAP[key]
+            if (index != null && index >= 0) {
+                return StaticVideo[index]
+            }
+            return null
         }
     }
 
     init {
-        StaticVideo[id] = this
-        StaticVideo[name] = this
+        synchronized(StaticVideo) {
+            StaticVideo.add(this)
+            val index = StaticVideo.lastIndex
+            MAP[id] = index
+            MAP[name] = index
+        }
     }
 }

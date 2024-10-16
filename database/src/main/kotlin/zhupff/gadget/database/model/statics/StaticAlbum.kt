@@ -3,6 +3,8 @@ package zhupff.gadget.database.model.statics
 import zhupff.gadget.database.model.Album
 import zhupff.gadget.database.model.Tag
 import zhupff.gadget.database.model.User
+import java.util.ArrayList
+import java.util.HashMap
 import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicLong
 
@@ -17,21 +19,31 @@ open class StaticAlbum(
     tags,
 ) {
 
-    companion object : MutableMap<String, StaticAlbum> by HashMap() {
+    companion object : MutableList<StaticAlbum> by ArrayList() {
         private val ID = AtomicLong(Int.MAX_VALUE.toLong())
+        private val MAP = HashMap<String, Int>()
 
         init {
             ServiceLoader.load(Album::class.java).forEach { album ->
-//                if (album is StaticAlbum) {
-//                    StaticAlbum[album.id] = album
-//                    StaticAlbum[album.name] = album
-//                }
+                // do nothing
             }
+        }
+
+        operator fun get(key: String): StaticAlbum? {
+            val index = MAP[key]
+            if (index != null && index >= 0) {
+                return StaticAlbum[index]
+            }
+            return null
         }
     }
 
     init {
-        StaticAlbum[id] = this
-        StaticAlbum[name] = this
+        synchronized(StaticAlbum) {
+            StaticAlbum.add(this)
+            val index = StaticAlbum.lastIndex
+            MAP[id] = index
+            MAP[name] = index
+        }
     }
 }
