@@ -1,6 +1,6 @@
-package zhupff.gadget.common.model
+package zhupff.gadget.database.model
 
-abstract class Tag(
+open class Tag(
     val id: String,
     val name: String,
     val link: String,

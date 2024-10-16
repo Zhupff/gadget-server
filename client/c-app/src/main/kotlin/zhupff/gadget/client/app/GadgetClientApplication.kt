@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.toPainter
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.*
+import zhupff.gadget.basic.model.ServerUrlAction
 import zhupff.gadget.client.ClientApi
-import zhupff.gadget.common.model.ServerUrlAction
 import java.awt.image.BufferedImage
 
 object GadgetClientApplication {

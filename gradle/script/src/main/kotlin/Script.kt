@@ -87,6 +87,10 @@ fun DependencyHandlerScope.jcodec(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "org.jcodec:jcodec-javase:0.2.5")
 }
 
+fun DependencyHandlerScope.json(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "org.json:json:20240303")
+}
+
 fun DependencyHandlerScope.springboot(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "org.springframework.boot:spring-boot-starter-web")
     this.dependencies.add(method, "com.fasterxml.jackson.module:jackson-module-kotlin")

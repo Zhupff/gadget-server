@@ -2,12 +2,8 @@ plugins {
     id("gadget.script")
 }
 
-script {
-    client()
-}
-
 dependencies {
-    coroutines()
-
+    json()
     implementation(project(":basic"))
+    implementation(project(":database"))
 }

@@ -4,7 +4,4 @@ plugins {
 
 dependencies {
     coroutines()
-
-    implementation(project(":common"))
-    implementation(project(":database"))
 }

@@ -26,7 +26,11 @@ dependencies {
     implementation(compose.desktop.currentOs)
     coroutines()
 
-    implementation(project(":common"))
+    implementation(project(":basic"))
+
+    implementation(project(":database:d-op"))
+    implementation(project(":database:d-res"))
+
     implementation(project(":client:c-app"))
 
     implementation(project(":server:s-app"))

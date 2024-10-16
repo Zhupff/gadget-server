@@ -11,7 +11,7 @@ dependencies {
     coroutines()
     zxing()
 
-    implementation(project(":common"))
+    implementation(project(":basic"))
     implementation(project(":client"))
     implementation(project(":server"))
 }

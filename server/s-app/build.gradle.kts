@@ -9,9 +9,7 @@ script {
 dependencies {
     autoService()
     coroutines()
-    gson()
 
+    implementation(project(":basic"))
     implementation(project(":server"))
-    implementation(project(":common"))
-    implementation(project(":database"))
 }

@@ -4,9 +4,7 @@ plugins {
 
 dependencies {
     gson()
+    json()
     jcodec()
+    implementation(project(":database"))
 }
-
-//script {
-//    publish()
-//}

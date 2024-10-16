@@ -1,6 +1,6 @@
-package zhupff.gadget.common.model
+package zhupff.gadget.basic.model
 
-import zhupff.gadget.common.api.GsonApi
+import zhupff.gadget.basic.json.JsonUtil
 
 open class QrCodeAction(
     val action: Action,
@@ -18,7 +18,7 @@ open class QrCodeAction(
         put("description", action.description)
     }
 
-    override fun toString(): String = GsonApi.toJson(this)
+    override fun toString(): String = JsonUtil.toJson(this)
 }
 
 

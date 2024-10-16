@@ -1,6 +1,6 @@
 package zhupff.gadget.database
 
-import zhupff.gadget.common.model.User
+import zhupff.gadget.database.model.User
 import java.util.concurrent.atomic.AtomicLong
 
 object UserRegistry {

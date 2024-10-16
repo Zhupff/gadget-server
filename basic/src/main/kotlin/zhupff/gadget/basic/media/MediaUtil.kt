@@ -1,14 +1,16 @@
-package zhupff.gadget.common.api
+package zhupff.gadget.basic.media
 
 import org.jcodec.api.awt.AWTFrameGrab
 import org.jcodec.common.io.NIOUtils
-import zhupff.gadget.common.model.Video
+import zhupff.gadget.basic.file.STATIC_RES_DIR
+import zhupff.gadget.basic.json.JsonUtil
+import zhupff.gadget.database.model.Video
 import javax.imageio.ImageIO
 
-object MediaHelper {
+object MediaUtil {
 
     fun parseVideo(path: String) {
-        val file = RES_STATIC_DIR.resolve(path)
+        val file = STATIC_RES_DIR.resolve(path)
         if (!file.exists()) {
             throw RuntimeException("${file.path} not exists!")
         }
@@ -25,7 +27,7 @@ object MediaHelper {
             users = emptyArray(),
             tags = emptyArray(),
         ) {}
-        ImageIO.write(frame, "png", RES_STATIC_DIR.resolve(video.cover).also { println(it.path) })
-        println(GsonApi.toJson(video))
+        ImageIO.write(frame, "png", STATIC_RES_DIR.resolve(video.cover).also { println(it.path) })
+        println(JsonUtil.toJson(video))
     }
 }
