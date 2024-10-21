@@ -43,3 +43,20 @@ val USERS_JSON_FILE = CONFIG_DIR.resolve("users.json").also { file ->
         file.createNewFile()
     }
 }
+
+
+val IMAGE_SUFFIX = arrayOf(
+    "jfif", "png", "jpg", "jpeg",
+)
+
+fun File.isImage(): Boolean {
+    return extension in IMAGE_SUFFIX
+}
+
+val VIDEO_SUFFIX = arrayOf(
+    "mp4",
+)
+
+fun File.isVideo(): Boolean {
+    return extension in VIDEO_SUFFIX
+}

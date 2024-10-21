@@ -38,6 +38,9 @@ open class StaticAlbum(
         }
     }
 
+    @Transient
+    open val path: String = ""
+
     init {
         synchronized(StaticAlbum) {
             StaticAlbum.add(this)
@@ -46,4 +49,37 @@ open class StaticAlbum(
             MAP[name] = index
         }
     }
+
+
+    fun newImage(
+        fileName: String,
+        width: Int,
+        height: Int,
+    ) = StaticImage(
+        name = "${this.name}[${fileName.substringBeforeLast('.').replace('_', ' ')}]",
+        width = width,
+        height = height,
+        url = "${this.path}$fileName",
+        users = this.users,
+        tags = this.tags,
+        albumId = this.id,
+    )
+
+    fun newVideo(
+        fileName: String,
+        width: Int,
+        height: Int,
+        duration: Long,
+        cover: String,
+    ) = StaticVideo(
+        name = "${this.name}[${fileName.substringBeforeLast('.').replace('_', ' ')}]",
+        width = width,
+        height = height,
+        duration = duration,
+        cover = cover,
+        url = "${this.path}$fileName",
+        users = this.users,
+        tags = this.tags,
+        albumId = this.id,
+    )
 }

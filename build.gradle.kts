@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":basic"))
 
     implementation(project(":database"))
-    implementation(project(":database:d-op"))
+//    implementation(project(":database:d-op"))
     implementation(project(":database:d-res"))
 
     implementation(project(":client"))
