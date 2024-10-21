@@ -10,7 +10,7 @@ open class StaticUser(
     name: String,
     avatar: String,
 ) : User(
-    "user_${ID.incrementAndGet()}",
+    newID(ID.incrementAndGet()),
     name,
     avatar
 ) {
