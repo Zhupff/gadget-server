@@ -34,6 +34,7 @@ class ResCopyScript(
     override fun run() {
         fromDir.listFiles().forEach { fromFile ->
             if (fromFile.isImage()) {
+                println("process image: ${fromFile.name}")
                 val toFile = toDir.resolve("${fromFile.nameWithoutExtension}.jpeg")
                 val fromImage = ImageIO.read(fromFile)
                 val scaledSize = getScaledSize(fromImage.width, fromImage.height)
@@ -44,7 +45,9 @@ class ResCopyScript(
                     it.dispose()
                 }
                 ImageIO.write(toImage, "JPEG", toFile)
+                println("process image: ${fromFile.name} DONE")
             } else if (fromFile.isVideo()) {
+                println("process video: ${fromFile.name}")
                 val toFile = toDir.resolve(fromFile.name)
                 val grabber = FFmpegFrameGrabber.createDefault(fromFile)
                 try {
@@ -56,6 +59,7 @@ class ResCopyScript(
                         recorder.format = "mp4"
                         recorder.frameRate = grabber.frameRate
                         recorder.sampleRate = grabber.sampleRate
+                        recorder.gopSize = grabber.frameRate.toInt()
                         recorder.videoCodec = grabber.videoCodec
                         recorder.audioCodec = grabber.audioCodec
                         recorder.videoBitrate = grabber.videoBitrate
@@ -80,10 +84,11 @@ class ResCopyScript(
                             }
                             count++
                             val p = frame.timestamp.toDouble() / duration.toDouble() * 100
-                            if (p > percent) {
+                            frame.keyFrame = true
+                            if (p - percent > 0.01) {
                                 percent = p
+                                println("process %.2f%%".format(percent))
                             }
-                            println("process %.2f%%".format(percent))
                             recorder.record(frame)
                         }
                     } catch (e: Exception) {
