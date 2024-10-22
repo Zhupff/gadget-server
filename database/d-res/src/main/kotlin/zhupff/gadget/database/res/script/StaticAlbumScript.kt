@@ -88,7 +88,8 @@ class StaticAlbumScript(val album: StaticAlbum) : Runnable {
     }
 
     private fun addVideoProperty(tsBuilder: TypeSpec.Builder, file: File) {
-        val grap = AWTFrameGrab.createAWTFrameGrab(NIOUtils.readableChannel(file))
+        val channel = NIOUtils.readableChannel(file)
+        val grap = AWTFrameGrab.createAWTFrameGrab(channel)
         val frame = grap.frame
         val coverFile = file.parentFile.resolve("${file.nameWithoutExtension}_cover.jpg")
         if (coverFile.exists()) coverFile.delete()
@@ -113,6 +114,7 @@ class StaticAlbumScript(val album: StaticAlbum) : Runnable {
                 ))
                 .build()
         )
+        channel.close()
     }
 
     private fun getContentCodeBlock(): String {
