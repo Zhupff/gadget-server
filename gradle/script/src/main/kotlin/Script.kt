@@ -116,6 +116,11 @@ fun DependencyHandlerScope.json(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "org.json:json:20240303")
 }
 
+fun DependencyHandlerScope.sqlite(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "org.springframework.boot:spring-boot-starter-jdbc:6.1.10")
+    this.dependencies.add(method, "org.xerial:sqlite-jdbc:3.45.3.0")
+}
+
 fun DependencyHandlerScope.zxing(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.zxing:core:3.5.3")
 }

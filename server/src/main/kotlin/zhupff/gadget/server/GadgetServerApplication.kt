@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationListener
 import java.net.InetAddress
 
 internal fun main(args: Array<String>) {
+    println("args: ${args.toList()}")
     runApplication<GadgetServerApplication>(*args)
 }
 
