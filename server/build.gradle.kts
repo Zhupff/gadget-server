@@ -6,7 +6,7 @@ plugins {
 dependencies {
     api(project(":server:s-api"))
     implementation(project(":server:s-home"))
-    implementation(project(":server:s-sqlite"))
+//    implementation(project(":server:s-sqlite"))
 
     coroutines()
 }
