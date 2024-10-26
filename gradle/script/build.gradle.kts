@@ -24,9 +24,17 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("GadgetScript") {
-            id = "gadget.script"
-            implementationClass = "Script"
+        register("ApiScript") {
+            id = "gadget.script.api"
+            implementationClass = "ApiScript"
+        }
+        register("ClientScript") {
+            id = "gadget.script.client"
+            implementationClass = "ClientScript"
+        }
+        register("ServerScript") {
+            id = "gadget.script.server"
+            implementationClass = "ServerScript"
         }
     }
 }

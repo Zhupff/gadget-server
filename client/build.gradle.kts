@@ -1,13 +1,37 @@
-plugins {
-    id("gadget.script")
-}
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
-script {
-    client()
+plugins {
+    id("gadget.script.client")
 }
 
 dependencies {
-    coroutines()
+    api(project(":client:c-api"))
+    implementation(project(":server"))
 
-    implementation(project(":basic"))
+    coroutines()
+    zxing()
+}
+
+
+compose.desktop {
+    application {
+        mainClass = "zhupff.gadget.client.GadgetClientApplicationKt"
+
+        nativeDistributions {
+            windows {
+                includeAllModules = true
+            }
+            targetFormats(
+//                TargetFormat.AppImage,
+                TargetFormat.Deb,
+                TargetFormat.Dmg,
+                TargetFormat.Exe,
+//                TargetFormat.Msi,
+//                TargetFormat.Pkg,
+                TargetFormat.Rpm,
+            )
+            packageName = "gadget-server"
+            packageVersion = "1.0.0"
+        }
+    }
 }
