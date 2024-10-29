@@ -32,4 +32,5 @@ include(
     "server:s-home",
     "server:s-res",
     "server:s-sqlite",
+    "server:s-user",
 )
