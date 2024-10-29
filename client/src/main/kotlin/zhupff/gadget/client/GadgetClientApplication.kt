@@ -1,28 +1,36 @@
 package zhupff.gadget.client
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.window.WindowDraggableArea
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toPainter
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.qrcode.QRCodeWriter
+import zhupff.gadget.client.basic.Logo
+import zhupff.gadget.client.basic.WINDOW_MIN_HEIGHT
+import zhupff.gadget.client.basic.WINDOW_MIN_WIDTH
+import zhupff.gadget.client.basic.WINDOW_TITLE_BAR_HEIGHT
 import zhupff.gadget.server.GadgetServerApplication
 import java.awt.Dimension
-import java.awt.image.BufferedImage
 
 internal fun main() {
     GadgetClientApplication.run()
 }
-
 
 
 object GadgetClientApplication : ClientApi, Runnable {
@@ -32,41 +40,105 @@ object GadgetClientApplication : ClientApi, Runnable {
     }
 
     override fun run() {
+
+        val runServer = false
+
         application {
+
+            val isUndecorated by remember { mutableStateOf(true) }
+
             Window(
                 onCloseRequest = ::exitApplication,
-                state = rememberWindowState(width = 1080.dp, height = 720.dp),
+                state = rememberWindowState(width = WINDOW_MIN_WIDTH.dp, height = WINDOW_MIN_HEIGHT.dp),
                 title = "Gadget Server",
+                undecorated = isUndecorated,
+                transparent = true,
             ) {
-                window.minimumSize = Dimension(1080, 720)
-                App()
+                window.minimumSize = Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
+
+                if (isUndecorated) {
+                    WindowDraggableArea(
+                        modifier = Modifier
+                            .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
+                    ) {
+                    }
+                }
+
+                App(
+                    runServer = runServer,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(8.dp))
+                )
             }
-            GadgetServerApplication.run()
+            if (runServer) {
+                GadgetServerApplication.run()
+            }
         }
     }
 
     @Composable
-    @Preview
-    fun App() {
-        val bitMatrix = QRCodeWriter().encode(ClientApi.get().getTestStr(), BarcodeFormat.QR_CODE, 512, 512)
-        val bufferedImage = BufferedImage(bitMatrix.width, bitMatrix.height, BufferedImage.TYPE_INT_ARGB)
-        for (h in 0 until bitMatrix.height) {
-            for (w in 0 until bitMatrix.width) {
-                bufferedImage.setRGB(w, h, if (bitMatrix.get(w, h)) 0xFF000000.toInt() else 0xFFFFFFFF.toInt())
-            }
-        }
+    fun App(
+        runServer: Boolean,
+        modifier: Modifier,
+    ) {
 
-        MaterialTheme {
-            Box(
-                modifier = Modifier.fillMaxSize(),
+        Box(
+            modifier = modifier
+        ) {
+            Wallpaper(
+                mask = Color.Transparent,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
-                Image(
-                    painter = bufferedImage.toPainter(),
-                    contentDescription = null,
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                Column(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .fillMaxHeight()
+                        .background(Color.Black.copy(alpha = 0.25f))
+                        .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
+                            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                    ) {
+                        Logo(
+                            modifier = Modifier
+                                .width(48.dp).height(48.dp)
+                        )
+
+                        Text(
+                            text = "Gadget",
+                            fontSize = 32.sp,
+                            textAlign = TextAlign.Center,
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize().weight(1F)
+                        .background(Color.White.copy(alpha = 0.25f))
+                ) {
+                }
             }
         }
+    }
+
+    @Composable
+    fun TitleBar(
+        modifier: Modifier = Modifier,
+    ) {
+
     }
 
     override fun getTestStr(): String = "Welcome to Gadget Client"
