@@ -23,40 +23,146 @@ private fun parseSVGPath(path: String) {
             break
         }
     }
+    val result = ArrayList<String>()
     data.forEach { node ->
         val char = node.first()
         val paramsStr = if (node.length > 0) {
             node.substring(1).replace(' ', ',')
         } else ""
-        val paramsBuilder = StringBuilder()
-        paramsStr
-            .split(',')
-            .forEach {
-                paramsBuilder.append(it).append("F,")
-            }
-        var params = paramsBuilder.toString()
-        if (params.length > 0) {
-            params = params.substring(0, params.length - 1)
+        val paramsStrList = paramsStr.split(',')
+        when (char) {
+            'a', 'A' -> parseA(char, paramsStrList, result)
+            'c', 'C' -> parseC(char, paramsStrList, result)
+            'h', 'H' -> parseH(char, paramsStrList, result)
+            'l', 'L' -> parseL(char, paramsStrList, result)
+            'm', 'M' -> parseM(char, paramsStrList, result)
+            's', 'S' -> parseS(char, paramsStrList, result)
+            'v', 'V' -> parseV(char, paramsStrList, result)
+            'z', 'Z' -> parseZ(result)
+            else -> result.add(node)
         }
+    }
+    result.forEach { println(it) }
+}
 
-        val p = when(char) {
-            'a' -> "PathNode.RelativeArcTo(${params}),"
-            'A' -> "PathNode.ArcTo(${params}),"
-            'c' -> "PathNode.RelativeCurveTo(${params}),"
-            'C' -> "PathNode.CurveTo(${params}),"
-            'h' -> "PathNode.RelativeHorizontalTo(${params}),"
-            'H' -> "PathNode.HorizontalTo(${params}),"
-            'l' -> "PathNode.RelativeLineTo(${params}),"
-            'L' -> "PathNode.LineTo(${params}),"
-            'm' -> "PathNode.RelativeMoveTo(${params}),"
-            'M' -> "PathNode.MoveTo(${params}),"
-            's' -> "PathNode.RelativeQuadTo(${params}),"
-            'S' -> "PathNode.QuadTo(${params}),"
-            'v' -> "PathNode.RelativeVerticalTo(${params}),"
-            'V' -> "PathNode.VerticalTo(${params}),"
-            'z', 'Z' -> "PathNode.Close,"
-            else -> node
-        }
-        println(p)
+private fun parseA(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 7
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'a') {
+                "PathNode.RelativeArcTo("
+            } else if (char == 'A') {
+                "PathNode.ArcTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseC(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 6
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'c') {
+                "PathNode.RelativeCurveTo("
+            } else if (char == 'C') {
+                "PathNode.CurveTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseH(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 1
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'h') {
+                "PathNode.RelativeHorizontalTo("
+            } else if (char == 'H') {
+                "PathNode.HorizontalTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseL(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 2
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'l') {
+                "PathNode.RelativeLineTo("
+            } else if (char == 'L') {
+                "PathNode.LineTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseM(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 2
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'm') {
+                "PathNode.RelativeMoveTo("
+            } else if (char == 'M') {
+                "PathNode.MoveTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseS(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 4
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 's') {
+                "PathNode.RelativeQuadTo("
+            } else if (char == 'S') {
+                "PathNode.QuadTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseV(char: Char, paramsStrList: List<String>, result: MutableList<String>) {
+    val paramsSize = 1
+    for (i in paramsStrList.indices step paramsSize) {
+        val sb = StringBuilder(
+            if (char == 'v') {
+                "PathNode.RelativeVerticalTo("
+            } else if (char == 'V') {
+                "PathNode.VerticalTo("
+            } else ""
+        )
+        buildParamsStr(paramsStrList.subList(i, i + paramsSize), sb)
+        sb.append("),")
+        result.add(sb.toString())
+    }
+}
+
+private fun parseZ(result: MutableList<String>) {
+    result.add("PathNode.Close,")
+}
+
+private fun buildParamsStr(paramsList: List<String>, sb: StringBuilder) {
+    paramsList.forEachIndexed { index, s ->
+        sb.append(s).append(if (index != paramsList.lastIndex) "F," else "F")
     }
 }

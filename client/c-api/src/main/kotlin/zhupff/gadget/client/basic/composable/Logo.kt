@@ -1,4 +1,4 @@
-package zhupff.gadget.client.basic
+package zhupff.gadget.client.basic.composable
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
@@ -132,8 +132,7 @@ private fun getLogoImageVector(
             PathNode.Close,
         ),
         fill = Brush.linearGradient(listOf(partBColor, partBColor))
-    )
-        .build()
+    ).build()
 }
 
 @Composable
@@ -143,7 +142,7 @@ fun Logo(
     Image(
         painter = rememberVectorPainter(getLogoImageVector(Color.Black, Color.White, Color(0xFF1997DD))),
         contentDescription = null,
-        modifier = modifier.clip(RoundedCornerShape(8.dp))
+        modifier = modifier
     )
 }
 

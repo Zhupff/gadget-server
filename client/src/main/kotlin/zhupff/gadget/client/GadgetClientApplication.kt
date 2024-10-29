@@ -21,10 +21,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import zhupff.gadget.client.basic.Logo
 import zhupff.gadget.client.basic.WINDOW_MIN_HEIGHT
 import zhupff.gadget.client.basic.WINDOW_MIN_WIDTH
 import zhupff.gadget.client.basic.WINDOW_TITLE_BAR_HEIGHT
+import zhupff.gadget.client.basic.composable.CloseImage
+import zhupff.gadget.client.basic.composable.Logo
 import zhupff.gadget.server.GadgetServerApplication
 import java.awt.Dimension
 
@@ -46,9 +47,10 @@ object GadgetClientApplication : ClientApi, Runnable {
         application {
 
             val isUndecorated by remember { mutableStateOf(true) }
+            val onCloseApp = ::exitApplication
 
             Window(
-                onCloseRequest = ::exitApplication,
+                onCloseRequest = onCloseApp,
                 state = rememberWindowState(width = WINDOW_MIN_WIDTH.dp, height = WINDOW_MIN_HEIGHT.dp),
                 title = "Gadget Server",
                 undecorated = isUndecorated,
@@ -66,6 +68,7 @@ object GadgetClientApplication : ClientApi, Runnable {
 
                 App(
                     runServer = runServer,
+                    onCloseApp = onCloseApp,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp))
@@ -80,6 +83,7 @@ object GadgetClientApplication : ClientApi, Runnable {
     @Composable
     fun App(
         runServer: Boolean,
+        onCloseApp: () -> Unit,
         modifier: Modifier,
     ) {
 
@@ -100,10 +104,9 @@ object GadgetClientApplication : ClientApi, Runnable {
                         .width(200.dp)
                         .fillMaxHeight()
                         .background(Color.Black.copy(alpha = 0.25f))
-                        .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                        .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
@@ -112,6 +115,7 @@ object GadgetClientApplication : ClientApi, Runnable {
                         Logo(
                             modifier = Modifier
                                 .width(48.dp).height(48.dp)
+                                .clip(RoundedCornerShape(8.dp))
                         )
 
                         Text(
@@ -120,15 +124,25 @@ object GadgetClientApplication : ClientApi, Runnable {
                             textAlign = TextAlign.Center,
                             fontStyle = FontStyle.Italic,
                             fontWeight = FontWeight.Normal,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(0.dp, 4.dp, 0.dp, 0.dp)
                         )
                     }
                 }
 
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize().weight(1F)
                         .background(Color.White.copy(alpha = 0.25f))
+                        .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 ) {
+                    TitleBar(
+                        onCloseApp = onCloseApp,
+                        modifier = Modifier
+                            .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
+                            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                    )
                 }
             }
         }
@@ -136,9 +150,20 @@ object GadgetClientApplication : ClientApi, Runnable {
 
     @Composable
     fun TitleBar(
+        onCloseApp: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
-
+        Box(
+            modifier = modifier
+        ) {
+            CloseImage(
+                onClick = onCloseApp,
+                modifier = Modifier
+                    .width(32.dp).height(32.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .align(Alignment.CenterEnd)
+            )
+        }
     }
 
     override fun getTestStr(): String = "Welcome to Gadget Client"
