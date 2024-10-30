@@ -66,6 +66,7 @@ open class StaticAlbum(
             width = width,
             height = height,
             duration = duration,
+            cover = "${this.title}/${file.substringBeforeLast('.')}_cover.jpeg",
             url = "${this.path}/${file}",
             user = this.user,
             albumID = this.id,

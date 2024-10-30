@@ -11,6 +11,7 @@ open class Video(
     val width: Int,
     val height: Int,
     val duration: Long,
+    val cover: String,
     val url: String,
     val user: User,
     val albumID: String? = null,
