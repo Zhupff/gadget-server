@@ -1,6 +1,7 @@
 package zhupff.gadget.client
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
@@ -13,19 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.*
 import zhupff.gadget.client.basic.WINDOW_MIN_HEIGHT
 import zhupff.gadget.client.basic.WINDOW_MIN_WIDTH
 import zhupff.gadget.client.basic.WINDOW_TITLE_BAR_HEIGHT
-import zhupff.gadget.client.basic.composable.CloseImage
+import zhupff.gadget.client.basic.composable.CloseWindowImage
 import zhupff.gadget.client.basic.composable.Logo
+import zhupff.gadget.client.basic.composable.MaximizeWindowImage
+import zhupff.gadget.client.basic.composable.MinimizeWindowImage
 import zhupff.gadget.server.GadgetServerApplication
 import java.awt.Dimension
 
@@ -47,14 +49,32 @@ object GadgetClientApplication : ClientApi, Runnable {
         application {
 
             val isUndecorated by remember { mutableStateOf(true) }
-            val onCloseApp = ::exitApplication
+            val windowState = rememberWindowState(width = WINDOW_MIN_WIDTH.dp, height = WINDOW_MIN_HEIGHT.dp)
+            val windowPanelControl by remember(windowState) {
+                mutableStateOf(
+                    WindowPanelControl(
+                        onCloseWindow = ::exitApplication,
+                        onMinimizeWindow = {
+                            windowState.isMinimized = true
+                        },
+                        onMaximizeWindow = {
+                            if (windowState.placement == WindowPlacement.Maximized) {
+                                windowState.placement = WindowPlacement.Floating
+                            } else {
+                                windowState.placement = WindowPlacement.Maximized
+                            }
+                        },
+                        windowState = windowState,
+                    )
+                )
+            }
 
             Window(
-                onCloseRequest = onCloseApp,
-                state = rememberWindowState(width = WINDOW_MIN_WIDTH.dp, height = WINDOW_MIN_HEIGHT.dp),
+                onCloseRequest = ::exitApplication,
+                state = windowState,
                 title = "Gadget Server",
                 undecorated = isUndecorated,
-                transparent = true,
+                transparent = isUndecorated,
             ) {
                 window.minimumSize = Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
 
@@ -62,13 +82,17 @@ object GadgetClientApplication : ClientApi, Runnable {
                     WindowDraggableArea(
                         modifier = Modifier
                             .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onDoubleTap = { windowPanelControl.onMaximizeWindow() }
+                                )
+                            }
                     ) {
                     }
                 }
 
                 App(
-                    runServer = runServer,
-                    onCloseApp = onCloseApp,
+                    windowPanelControl = windowPanelControl,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp))
@@ -81,9 +105,8 @@ object GadgetClientApplication : ClientApi, Runnable {
     }
 
     @Composable
-    fun App(
-        runServer: Boolean,
-        onCloseApp: () -> Unit,
+    private fun App(
+        windowPanelControl: WindowPanelControl,
         modifier: Modifier,
     ) {
 
@@ -138,7 +161,7 @@ object GadgetClientApplication : ClientApi, Runnable {
                         .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 ) {
                     TitleBar(
-                        onCloseApp = onCloseApp,
+                        windowPanelControl = windowPanelControl,
                         modifier = Modifier
                             .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
                             .padding(0.dp, 10.dp, 0.dp, 0.dp)
@@ -149,22 +172,56 @@ object GadgetClientApplication : ClientApi, Runnable {
     }
 
     @Composable
-    fun TitleBar(
-        onCloseApp: () -> Unit,
+    private fun TitleBar(
+        windowPanelControl: WindowPanelControl,
         modifier: Modifier = Modifier,
     ) {
-        Box(
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            CloseImage(
-                onClick = onCloseApp,
+            Box(
                 modifier = Modifier
-                    .width(32.dp).height(32.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .align(Alignment.CenterEnd)
-            )
+                    .fillMaxSize().weight(1F)
+            ) {
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .wrapContentWidth().fillMaxHeight()
+            ) {
+                MinimizeWindowImage(
+                    onClick = windowPanelControl.onMinimizeWindow,
+                    modifier = Modifier
+                        .width(32.dp).height(32.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+                MaximizeWindowImage(
+                    onClick = windowPanelControl.onMaximizeWindow,
+                    maximized = windowPanelControl.windowState.placement == WindowPlacement.Maximized,
+                    modifier = Modifier
+                        .width(32.dp).height(32.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+                CloseWindowImage(
+                    onClick = windowPanelControl.onCloseWindow,
+                    modifier = Modifier
+                        .width(32.dp).height(32.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+            }
         }
     }
+
+    private class WindowPanelControl(
+        val onMinimizeWindow: () -> Unit,
+        val onMaximizeWindow: () -> Unit,
+        val onCloseWindow: () -> Unit,
+        val windowState: WindowState,
+    )
 
     override fun getTestStr(): String = "Welcome to Gadget Client"
 }
