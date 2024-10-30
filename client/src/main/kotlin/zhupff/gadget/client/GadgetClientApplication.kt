@@ -1,20 +1,23 @@
 package zhupff.gadget.client
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -44,16 +47,21 @@ object GadgetClientApplication : ClientApi, Runnable {
 
     override fun run() {
 
-        val runServer = false
-
         application {
 
             val isUndecorated by remember { mutableStateOf(true) }
-            val windowState = rememberWindowState(width = WINDOW_MIN_WIDTH.dp, height = WINDOW_MIN_HEIGHT.dp)
+            val windowState = rememberWindowState(
+                width = WINDOW_MIN_WIDTH.dp,
+                height = WINDOW_MIN_HEIGHT.dp,
+                position = WindowPosition(Alignment.Center)
+            )
             val windowPanelControl by remember(windowState) {
                 mutableStateOf(
                     WindowPanelControl(
-                        onCloseWindow = ::exitApplication,
+                        onCloseWindow = {
+                            GadgetServerApplication.exit()
+                            exitApplication()
+                        },
                         onMinimizeWindow = {
                             windowState.isMinimized = true
                         },
@@ -70,7 +78,7 @@ object GadgetClientApplication : ClientApi, Runnable {
             }
 
             Window(
-                onCloseRequest = ::exitApplication,
+                onCloseRequest = windowPanelControl.onCloseWindow,
                 state = windowState,
                 title = "Gadget Server",
                 undecorated = isUndecorated,
@@ -98,11 +106,9 @@ object GadgetClientApplication : ClientApi, Runnable {
                         .clip(RoundedCornerShape(8.dp))
                 )
             }
-            if (runServer) {
-                GadgetServerApplication.run()
-            }
         }
     }
+
 
     @Composable
     private fun App(
@@ -122,23 +128,35 @@ object GadgetClientApplication : ClientApi, Runnable {
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
+                var selectedOptionName by remember { mutableStateOf("") }
+
                 Column(
                     modifier = Modifier
                         .width(200.dp)
                         .fillMaxHeight()
                         .background(Color.Black.copy(alpha = 0.25f))
-                        .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
-                            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                            .padding(16.dp, 10.dp, 16.dp, 0.dp)
                     ) {
                         Logo(
                             modifier = Modifier
                                 .width(48.dp).height(48.dp)
                                 .clip(RoundedCornerShape(8.dp))
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onDoubleTap = {
+                                            if (GadgetServerApplication.isRunning) {
+                                                GadgetServerApplication.exit()
+                                            } else {
+                                                GadgetServerApplication.run()
+                                            }
+                                        }
+                                    )
+                                }
                         )
 
                         Text(
@@ -152,6 +170,74 @@ object GadgetClientApplication : ClientApi, Runnable {
                                 .padding(0.dp, 4.dp, 0.dp, 0.dp)
                         )
                     }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize().weight(1F)
+                            .padding(0.dp, 16.dp, 0.dp, 0.dp)
+                    ) {
+                        items(
+                            items = listOf(
+                                "images/ic_home.svg" to "首页",
+                                "images/ic_music.svg" to "音乐",
+                                "images/ic_image.svg" to "图片",
+                                "images/ic_video.svg" to "视频",
+                                "images/ic_subscribe.svg" to "订阅",
+                                "images/ic_favorite.svg" to "收藏",
+                                "images/ic_chat.svg" to "聊天",
+                            )
+                        ) { option ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth().height(50.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clickable {
+                                            selectedOptionName = option.second
+                                        }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(option.first),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .padding(16.dp, 0.dp, 0.dp, 0.dp)
+                                            .size(24.dp)
+                                    )
+                                    Text(
+                                        text = option.second,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Thin,
+                                        textAlign = TextAlign.Start,
+                                        modifier = Modifier
+                                            .fillMaxWidth().wrapContentHeight().weight(1F)
+                                            .padding(0.dp, 0.dp, 16.dp, 0.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp, 17.dp, 0.dp, 17.dp)
+                            .size(24.dp)
+                            .clip(RoundedCornerShape(4.dp))
+//                            .background(Color.Cyan)
+                    ) {
+                        Icon(
+                            painter = painterResource("images/ic_setting.svg"),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                                .fillMaxSize()
+                                .clickable {  }
+                        )
+                    }
                 }
 
                 Column(
@@ -162,6 +248,7 @@ object GadgetClientApplication : ClientApi, Runnable {
                 ) {
                     TitleBar(
                         windowPanelControl = windowPanelControl,
+                        selectedOptionName,
                         modifier = Modifier
                             .fillMaxWidth().height(WINDOW_TITLE_BAR_HEIGHT.dp)
                             .padding(0.dp, 10.dp, 0.dp, 0.dp)
@@ -171,9 +258,11 @@ object GadgetClientApplication : ClientApi, Runnable {
         }
     }
 
+
     @Composable
     private fun TitleBar(
         windowPanelControl: WindowPanelControl,
+        selectedOptionName: String,
         modifier: Modifier = Modifier,
     ) {
         Row(
@@ -185,6 +274,47 @@ object GadgetClientApplication : ClientApi, Runnable {
                 modifier = Modifier
                     .fillMaxSize().weight(1F)
             ) {
+
+                Text(
+                    text = selectedOptionName,
+                    fontSize = 32.sp,
+                    textAlign = TextAlign.Center,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier
+                        .padding(0.dp, 4.dp, 0.dp, 0.dp)
+                        .wrapContentSize()
+                )
+
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(0.dp, 4.dp, 0.dp, 4.dp)
+                    .wrapContentWidth().fillMaxHeight()
+                    .clip(CircleShape)
+                    .background(LocalContentColor.current.copy(0.3F))
+            ) {
+                Icon(
+                    painter = painterResource("images/ic_skull.svg"),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(8.dp, 0.dp, 0.dp, 0.dp)
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray.copy(0.5F))
+                )
+                Text(
+                    text = "SignIn / SignUp",
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    fontStyle = FontStyle.Normal,
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 8.dp, 0.dp)
+                        .wrapContentSize()
+                )
             }
 
             Row(
@@ -215,6 +345,9 @@ object GadgetClientApplication : ClientApi, Runnable {
             }
         }
     }
+
+
+
 
     private class WindowPanelControl(
         val onMinimizeWindow: () -> Unit,
