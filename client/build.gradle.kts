@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.text.SimpleDateFormat
 
 plugins {
     id("gadget.script.client")
@@ -18,9 +19,14 @@ compose.desktop {
         mainClass = "zhupff.gadget.client.GadgetClientApplicationKt"
 
         nativeDistributions {
-            windows {
-                includeAllModules = true
-            }
+            packageName = "GadgetServer"
+            packageVersion = SimpleDateFormat("YY.M.d")
+                .format(System.currentTimeMillis())
+                .also { println("version: $it") }
+            includeAllModules = true
+            copyright = "© 2024 Zhupff. All rights reserved."
+            vendor = "Zhupff"
+            licenseFile.set(rootProject.file("LICENSE"))
             targetFormats(
 //                TargetFormat.AppImage,
                 TargetFormat.Deb,
@@ -30,8 +36,13 @@ compose.desktop {
 //                TargetFormat.Pkg,
                 TargetFormat.Rpm,
             )
-            packageName = "gadget-server"
-            packageVersion = "1.0.0"
+
+            windows {
+                shortcut = true
+            }
+            linux {
+                shortcut = true
+            }
         }
     }
 }

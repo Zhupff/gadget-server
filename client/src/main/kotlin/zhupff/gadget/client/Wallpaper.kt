@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.res.painterResource
 import java.io.File
 
 @Composable
@@ -20,13 +21,13 @@ fun Wallpaper(
     Box(
         modifier = modifier,
     ) {
-        val image = remember {
-            val file = File("").resolve("localres/wallpaper.jpg")
-            loadImageBitmap(file.inputStream())
-        }
+//        val image = remember {
+//            val file = File("").resolve("localres/wallpaper.jpg")
+//            loadImageBitmap(file.inputStream())
+//        }
 
         Image(
-            bitmap = image,
+            painter = painterResource("images/wallpaper.jpg"),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             alpha = alpha,
