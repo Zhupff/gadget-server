@@ -4,4 +4,6 @@ plugins {
 
 dependencies {
     implementation(project(":server:s-api"))
+
+    autoService()
 }

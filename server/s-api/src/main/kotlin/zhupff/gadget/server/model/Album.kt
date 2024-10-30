@@ -5,10 +5,11 @@ import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-open class User(
+open class Album(
     val id: String,
-    val name: String,
-    val avatar: String,
+    val title: String,
+    val user: User,
+    val tags: Array<Tag>,
 ) : Serializable {
 
     companion object {
@@ -17,12 +18,14 @@ open class User(
 
         fun init() {
             if (init.compareAndSet(false, true)) {
-                ServiceLoader.load(User::class.java).forEach {
-                    // do nothing.
+                ServiceLoader.load(Album::class.java).forEach {
+                    // do nothing
                 }
             }
         }
 
-        fun newId(id: Long = ID.getAndIncrement()): String = "user_$id"
+        fun newId(id: Long = ID.getAndIncrement()): String = "album_$id"
     }
+
+    var content: Array<out Any> = emptyArray()
 }
