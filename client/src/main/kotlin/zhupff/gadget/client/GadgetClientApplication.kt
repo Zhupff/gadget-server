@@ -182,6 +182,7 @@ object GadgetClientApplication : ClientApi, Runnable {
                                 "images/ic_music.svg" to "音乐",
                                 "images/ic_image.svg" to "图片",
                                 "images/ic_video.svg" to "视频",
+                                "images/ic_game.svg" to "游戏",
                                 "images/ic_subscribe.svg" to "订阅",
                                 "images/ic_favorite.svg" to "收藏",
                                 "images/ic_chat.svg" to "聊天",
@@ -227,7 +228,6 @@ object GadgetClientApplication : ClientApi, Runnable {
                             .padding(16.dp, 17.dp, 0.dp, 17.dp)
                             .size(24.dp)
                             .clip(RoundedCornerShape(4.dp))
-//                            .background(Color.Cyan)
                     ) {
                         Icon(
                             painter = painterResource("images/ic_setting.svg"),
