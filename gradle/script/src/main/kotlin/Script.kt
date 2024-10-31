@@ -108,6 +108,14 @@ fun DependencyHandlerScope.gson(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "com.google.code.gson:gson:2.11.0")
 }
 
+fun DependencyHandlerScope.javacv(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "org.bytedeco:javacv-platform:1.5.10")
+}
+
+fun DependencyHandlerScope.kotlinpoet(method: String = IMPLEMENTATION) {
+    this.dependencies.add(method, "com.squareup:kotlinpoet:1.12.0")
+}
+
 fun DependencyHandlerScope.jcodec(method: String = IMPLEMENTATION) {
     this.dependencies.add(method, "org.jcodec:jcodec-javase:0.2.5")
 }

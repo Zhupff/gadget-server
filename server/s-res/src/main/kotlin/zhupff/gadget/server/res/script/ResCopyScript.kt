@@ -76,6 +76,15 @@ private class ResCopyScript(
         }
     }
 
+    init {
+        if (resolvePath.startsWith('/')) {
+            throw IllegalArgumentException("resolvePath must not start with /")
+        }
+        if (!resolvePath.endsWith('/')) {
+            throw IllegalArgumentException("resolvePath must end with /")
+        }
+    }
+
     private val originResDir = ORIGIN_RES.resolve(resolvePath).also {
         if (!it.exists()) {
             throw FileNotFoundException("${it.absolutePath} does not exist!")
