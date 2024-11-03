@@ -16,17 +16,6 @@ class VolParseScript(
     val resolvePath: String,
 ) : Runnable {
 
-    companion object {
-        private val LOCAL_RES = File("").resolve("localres").also {
-            if (!it.exists()) {
-                throw FileNotFoundException("${it.absolutePath} NOT FOUND!")
-            }
-        }
-
-        private val IMAGE_SUFFIX = arrayOf("jfif", "jpeg", "jpg", "png")
-        private val VIDEO_SUFFIX = arrayOf("mp4")
-    }
-
     init {
         if (resolvePath.startsWith('/')) {
             throw IllegalArgumentException("resolvePath must not start with /")
@@ -51,9 +40,9 @@ class VolParseScript(
         } else if (name.endsWith(".cover")) {
             // pass
         } else {
-            if (ext in IMAGE_SUFFIX) {
+            if (ext in IMAGE_EXT) {
                 filter = true
-            } else if (ext in VIDEO_SUFFIX) {
+            } else if (ext in VIDEO_EXT) {
                 filter = true
             }
         }
@@ -69,9 +58,9 @@ class VolParseScript(
         val contentsBuilder = StringBuilder()
         files.forEachIndexed { index, file ->
             val ext = file.extension
-            if (ext in IMAGE_SUFFIX) {
+            if (ext in IMAGE_EXT) {
                 contentsBuilder.appendLine(parseImage(file, index + 1))
-            } else if (ext in VIDEO_SUFFIX) {
+            } else if (ext in VIDEO_EXT) {
                 contentsBuilder.appendLine(parseVideo(file, index + 1))
             }
         }

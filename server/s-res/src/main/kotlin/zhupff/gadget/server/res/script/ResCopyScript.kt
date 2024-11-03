@@ -36,25 +36,10 @@ private class ResCopyScript(
 ) : Runnable, Callable<CountDownLatch> {
 
     companion object {
-        private val ORIGIN_RES = File("").resolve("originres").also {
-            println(it.absolutePath)
-            if (!it.exists()) {
-                throw FileNotFoundException("originres NOT FOUND!")
-            }
-        }
-        private val LOCAL_RES = File("").resolve("localres").also {
-            if (!it.exists()) {
-                it.mkdirs()
-            }
-        }
-
         private val L = 1920
         private val S = 1080
         private val F = 24
         private val R = 4_800_000
-
-        private val IMAGE_SUFFIX = arrayOf("jfif", "jpeg", "jpg", "png")
-        private val VIDEO_SUFFIX = arrayOf("mp4")
 
         private val imageExecutor by lazy { Executors.newFixedThreadPool(2) }
         private val videoExecutor by lazy { Executors.newFixedThreadPool(2) }
@@ -107,9 +92,9 @@ private class ResCopyScript(
             if (name.contains('[') && name.contains(']')) {
                 // pass
             } else {
-                if (ext in IMAGE_SUFFIX) {
+                if (ext in IMAGE_EXT) {
                     tasks.add(ImageTask(file))
-                } else if (ext in VIDEO_SUFFIX) {
+                } else if (ext in VIDEO_EXT) {
                     tasks.add(VideoTask(file))
                 }
             }
