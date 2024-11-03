@@ -33,6 +33,10 @@ class SingleVideoScript : Runnable {
         }
     }
 
+    private val archiveDir = fromDir.resolve("archive").also {
+        it.mkdirs()
+    }
+
     private val executor by lazy { Executors.newFixedThreadPool(4) }
 
     private val lock = Any()
@@ -59,6 +63,7 @@ class SingleVideoScript : Runnable {
                         println("${toMD5Dir.absolutePath} already exists")
                     } else {
                         toMD5Dir.mkdirs()
+                        val archiveFile = archiveDir.resolve("${md5}.${file.extension}")
                         val videoFile = toMD5Dir.resolve("video.${file.extension}")
                         val coverFile = toMD5Dir.resolve("cover.jpeg")
                         val jsonFile = toMD5Dir.resolve("info.json")
@@ -81,11 +86,14 @@ class SingleVideoScript : Runnable {
                                         .replace('\\', File.separatorChar),
                                 )
                                 jsonFile.writeText(gson.toJson(singleVideo), Charsets.UTF_8)
-                                println(singleVideo.url)
                                 FileCopyUtils.copy(file, videoFile)
+                                if (!archiveFile.exists()) {
+                                    FileCopyUtils.copy(file, archiveFile)
+                                }
                                 file.deleteOnExit()
                             }
                         } catch (e: Exception) {
+                            println("process ${file.name} exception: ${e.message}")
                             e.printStackTrace()
                             toMD5Dir.deleteOnExit()
                         }
