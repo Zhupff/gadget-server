@@ -18,4 +18,11 @@ class SingleVideoController {
         val videos = SingleVideoDB.getItems(lastVideoID, size)
         return gson.toJson(videos)
     }
+
+    @GetMapping("/reportsinglevideo")
+    fun reportSingleVideo(
+        @RequestParam("video_id") videoID: String,
+    ) {
+        SingleVideoDB.record(videoID)
+    }
 }
