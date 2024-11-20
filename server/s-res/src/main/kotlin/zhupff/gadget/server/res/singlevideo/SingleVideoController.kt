@@ -12,7 +12,7 @@ class SingleVideoController {
     fun requestSingleVideos(
         @RequestParam("last_video_id", required = false) lastVideoID: String?,
         @RequestParam("size", required = false, defaultValue = "10") size: Int): String {
-        if (lastVideoID.isNullOrEmpty()) {
+        if (lastVideoID.isNullOrEmpty() || lastVideoID == "0") {
             SingleVideoDB.doShuffle()
         }
         val videos = SingleVideoDB.getItems(lastVideoID, size)

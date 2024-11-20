@@ -47,6 +47,7 @@ class GadgetServerApplication : ServerApi, ApplicationListener<WebServerInitiali
     override fun onApplicationEvent(event: WebServerInitializedEvent) {
         val ip = InetAddress.getLocalHost().hostAddress
         val port = event.applicationContext.webServer.port
+        println("ip:port --> ${ip}:${port}")
     }
 
     override fun getTestStr(): String = "Welcome to Gadget Server"

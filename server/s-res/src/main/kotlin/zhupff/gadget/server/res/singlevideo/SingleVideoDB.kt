@@ -31,7 +31,7 @@ class SingleVideoDB {
 
         fun getItems(lastVideoID: String?, size: Int): List<SingleVideo> {
             if (size <= 0) return emptyList()
-            if (lastVideoID.isNullOrEmpty()) {
+            if (lastVideoID.isNullOrEmpty() || lastVideoID == "0") {
                 isShuffled.set(false)
                 return subList(0, min(size, this.size))
             }
